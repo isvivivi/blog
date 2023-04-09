@@ -1,0 +1,29 @@
+/**
+ * 变量样式
+ */
+@mainColor: #fff; // 主颜色
+@thinColor: #555; // 描述色
+@assistColor: #7b7e86; // 辅助色
+@warningColor: #ff6c1a; // 提醒色
+@errorColor: #fe3438; //错误、禁用色
+@highlightColor: #6e74e0; // 高亮色
+@thinHighlightColor: rgba(110,116,224,.1); // 高亮浅色
+@borderColor: #ededed; // 边框色
+@borderBoldColor: #16151A; // 边框辅色
+@cuttingLineColor: #4528DC; // 分割线色
+@backgroundColor: #110E19; // 背景色
+@thinBgColor: rgba(233, 234, 237, 0.7); // 背景色
+@shadowColor: gainsboro; // 阴影色
+
+@baseSpH: 24px; // 基础左右间距
+@baseSp: 20px; // 基础间距
+
+@min-body-height: calc(~'100vh - 50px'); // 页面最小高度，去除顶部的高度
+
+.ellipsis-line-clamp (@line: 1) {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: @line;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
