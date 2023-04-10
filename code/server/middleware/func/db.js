@@ -5,14 +5,15 @@
  */
 export const add = (model, conditions) => {
   return new Promise((resolve, reject) => {
-    model.create(conditions, (err, res) => {
-      if (err) {
-        console.error("Error: " + JSON.stringify(err));
-        reject(err);
-        return false;
-      }
+    model.create(conditions)
+    .then((res) => {
       console.log("save success!");
       resolve(res);
+    })
+    .catch((err) => {
+      console.error("Error: " + JSON.stringify(err));
+      reject(err);
+      return false;
     });
   });
 };
@@ -26,12 +27,8 @@ export const add = (model, conditions) => {
  */
 export const update = (model, conditions, update, options) => {
   return new Promise((resolve, reject) => {
-    model.update(conditions, update, options, (err, res) => {
-      if (err) {
-        console.error("Error: " + JSON.stringify(err));
-        reject(err);
-        return false;
-      }
+    model.update(conditions, update, options)
+    .then((res) => {
       if (res.n !== 0) {
         console.log("update success!");
       } else {
@@ -39,6 +36,11 @@ export const update = (model, conditions, update, options) => {
         return reject("update fail:no this data!");
       }
       resolve(res);
+    })
+    .catch((err) => {
+      console.error("Error: " + JSON.stringify(err));
+      reject(err);
+      return false;
     });
   });
 };
@@ -51,19 +53,19 @@ export const update = (model, conditions, update, options) => {
 
 export const remove = (model, conditions) => {
   return new Promise((resolve, reject) => {
-    model.remove(conditions, function(err, res) {
-      if (err) {
-        console.error("Error: " + JSON.stringify(err));
-        reject(err);
-        return false;
+    model.remove(conditions)
+    .then((res) => {
+      if (res.result.n !== 0) {
+        console.log("remove success!");
       } else {
-        if (res.result.n !== 0) {
-          console.log("remove success!");
-        } else {
-          console.log("remove fail:no this data!");
-        }
-        resolve(res);
+        console.log("remove fail:no this data!");
       }
+      resolve(res);
+    })
+    .catch((err) => {
+      console.error("Error: " + JSON.stringify(err));
+      reject(err);
+      return false;
     });
   });
 };
@@ -82,14 +84,13 @@ export const find = async (model, conditions, fields, options = {}) => {
 
   const getCount = () => {
     return new Promise((resolve, reject) => {
-      model.find(conditions, fields).count({}, (err, res) => {
-        if (err) {
+      model.find(conditions, fields)
+      .count({})
+        .then((res) => resolve(res))
+        .catch((err) => {
           console.log("查询长度错误");
           return reject(err);
-        }
-
-        resolve(res);
-      });
+        });
     });
   };
 
@@ -97,29 +98,29 @@ export const find = async (model, conditions, fields, options = {}) => {
 
   return new Promise((resolve, reject) => {
     model
-      .find(conditions, fields, options, function(err, res) {
-        if (err) {
-          console.error("Error: " + JSON.stringify(err));
-          reject(err);
-          return false;
-        } else {
-          if (res.length !== 0) {
-            resolve({
-              list: res,
-              total: count,
-            });
-            console.log("find success!");
-          } else {
-            console.log("find fail:no this data!");
-          }
-          // resolve(res);
+      .find(conditions, fields, options)
+      .then((res) => {
+        if (res.length !== 0) {
           resolve({
             list: res,
             total: count,
           });
+          console.log("find success!");
+        } else {
+          console.log("find fail:no this data!");
         }
+        // resolve(res);
+        resolve({
+          list: res,
+          total: count,
+        });
       })
-      .sort(sort);
+      .catch((err) => {
+        console.error("Error: " + JSON.stringify(err));
+        reject(err);
+        return false;
+      })
+      // .sort(sort);
   });
 };
 
@@ -136,19 +137,19 @@ export const findOne = (model, conditions, fields, options = {}) => {
   delete options.sort;
   return new Promise((resolve, reject) => {
     model
-      .findOne(conditions, fields, options, function(err, res) {
-        if (err) {
-          console.error("Error: " + JSON.stringify(err));
-          reject(err);
-          return false;
+      .findOne(conditions, fields, options)
+      .then((res) => {
+        if (res) {
+          console.log("find success!");
         } else {
-          if (res) {
-            console.log("find success!");
-          } else {
-            console.log("find fail:no this data!");
-          }
-          resolve(res);
+          console.log("find fail:no this data!");
         }
+        resolve(res);
+      })
+      .catch((err) => {
+        console.error("Error: " + JSON.stringify(err));
+        reject(err);
+        return false;
       })
       .sort(sort);
   });
@@ -160,40 +161,41 @@ export const findPage = async (model, conditions, fields, options = {}) => {
 
   const getCount = () => {
     return new Promise((resolve, reject) => {
-      model.find(conditions, fields).count({}, (err, res) => {
-        if (err) {
-          console.log("查询长度错误");
-          return reject(err);
-        }
+      model.find(conditions, fields).count({})
+      .then((res) => {
         resolve(res);
-      });
+      })
+      .catch((err) => {
+        console.log("查询长度错误");
+        return reject(err);
+      })
     });
   };
 
   const count = await getCount();
 
   return new Promise((resolve, reject) => {
-    model.find(conditions, fields, options, function(err, res) {
-      if (err) {
-        console.error("Error: " + JSON.stringify(err));
-        reject(err);
-        return false;
+    model.find(conditions, fields, options)
+    .then((res) => {
+      if (res.length !== 0) {
+        console.log("find success!");
+        resolve({
+          list: res,
+          total: count,
+        });
       } else {
-        if (res.length !== 0) {
-          console.log("find success!");
-          resolve({
-            list: res,
-            total: count,
-          });
-        } else {
-          console.log("find fail:no this data!");
-          resolve({
-            list: res,
-            total: count,
-          });
-        }
+        console.log("find fail:no this data!");
+        resolve({
+          list: res,
+          total: count,
+        });
       }
-    });
+    })
+    .catch((err) => {
+      console.error("Error: " + JSON.stringify(err));
+      reject(err);
+      return false;
+    })
   });
 };
 
@@ -204,14 +206,15 @@ export const findPage = async (model, conditions, fields, options = {}) => {
  */
 export const aggregate = (model, conditions) => {
   return new Promise((resolve, reject) => {
-    model.aggregate(conditions, (err, res) => {
-      if (err) {
-        console.error("Error: " + JSON.stringify(err));
-        reject(err);
-        return false;
-      }
+    model.aggregate(conditions)
+    .then((res) => {
       console.log("aggregate success!");
       resolve(res);
-    });
+    })
+    .catch((err) => {
+      console.error("Error: " + JSON.stringify(err));
+      reject(err);
+      return false;
+    })
   });
 };

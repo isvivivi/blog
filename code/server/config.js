@@ -16,14 +16,24 @@ const port = process.env.NODE_ENV === 'production' ? '80' : '3000';
 
 export default {
   env: process.env.NODE_ENV,
+  host: "localhost",
   port,
   auth,
   log,
+  // local
+  // mongodb: {
+  //   authSource: 'admin',
+  //   username: "vivi",
+  //   pwd: '123456',
+  //   address: "127.0.0.1:27017",
+  //   db: "viviBlog",
+  // },
+  // atlas
   mongodb: {
     authSource: 'admin',
-    username: "vivi",
-    pwd: '123456',
-    address: "127.0.0.1:27017",
+    username: "isvivivi",
+    pwd: '12345677',
+    address: "vivicluster.kl0r5ne.mongodb.net",
     db: "viviBlog",
   },
 };
