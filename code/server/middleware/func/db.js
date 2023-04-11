@@ -27,7 +27,7 @@ export const add = (model, conditions) => {
  */
 export const update = (model, conditions, update, options) => {
   return new Promise((resolve, reject) => {
-    model.update(conditions, update, options)
+    model.updateOne(conditions, update, options)
     .then((res) => {
       if (res.n !== 0) {
         console.log("update success!");
@@ -45,6 +45,7 @@ export const update = (model, conditions, update, options) => {
   });
 };
 
+
 /**
  * 公共remove方法
  * @param model
@@ -53,9 +54,9 @@ export const update = (model, conditions, update, options) => {
 
 export const remove = (model, conditions) => {
   return new Promise((resolve, reject) => {
-    model.remove(conditions)
+    model.deleteOne(conditions)
     .then((res) => {
-      if (res.result.n !== 0) {
+      if (res.result !== 0) {
         console.log("remove success!");
       } else {
         console.log("remove fail:no this data!");
@@ -151,7 +152,7 @@ export const findOne = (model, conditions, fields, options = {}) => {
         reject(err);
         return false;
       })
-      .sort(sort);
+      // .sort(sort);
   });
 };
 

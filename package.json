@@ -21,7 +21,7 @@
     "start": "pm2 start code/server/index.js",
     "stop": "pm2 stop code/server/index.js",
     "restart": "pm2 restart code/server/index.js",
-    "replit": "npm-run-all -p -r server dev:client"
+    "replit": "npm-run-all -p -r server dev:client dev:admin"
   },
   "license": "ISC",
   "devDependencies": {

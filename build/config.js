@@ -9,7 +9,7 @@ module.exports = {
       devtoolType: "eval-cheap-module-source-map",
       proxyTable: {
         "/admin_api": {
-          target: "http://127.0.0.1:3000/admin_api/",
+          target: "http://0.0.0.0:3000/admin_api/",
           changeOrigin: true,
           pathRewrite: {
             "^/admin_api": "/",
@@ -31,14 +31,13 @@ module.exports = {
     dev: {
       env: "development",
       publicPath: "/",
-      host: "0.0.0.0",
+      host: "localhost",
       port: "8080",
       assetsSubDirectory: "static",
       devtoolType: "eval-cheap-module-source-map",
-      disableHostCheck: true,
       proxyTable: {
         "/client_api": {
-          target: "http://127.0.0.1:3000/client_api/",
+          target: "http://0.0.0.0:3000/client_api/",
           changeOrigin: true,
           pathRewrite: {
             "^/client_api": "/",
